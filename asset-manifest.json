@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/telephone-list/static/css/main.c08df1ee.css",
+    "main.js": "/telephone-list/static/js/main.3b30299e.js",
+    "index.html": "/telephone-list/index.html",
+    "main.c08df1ee.css.map": "/telephone-list/static/css/main.c08df1ee.css.map",
+    "main.3b30299e.js.map": "/telephone-list/static/js/main.3b30299e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c08df1ee.css",
+    "static/js/main.3b30299e.js"
+  ]
+}
