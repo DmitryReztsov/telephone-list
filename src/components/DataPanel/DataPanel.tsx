@@ -3,38 +3,23 @@ import {Box, Skeleton} from '@mui/material';
 import DataFilter from '../DataFilter/DataFilter';
 import DataTable from '../DataTable/DataTable';
 import {api} from '../../service/api';
+import {IUser} from '../../models/IUser';
 
 function DataPanel() {
-  const [limit, setLimit] = useState<number>(1);
   const [filter, setFilter] = useState<string>('');
-  const [isBottom, setIsBottom] = useState<boolean>(false);
-  const {data: users, isLoading, error} = api.useGetUsersQuery(limit);
+  const [newUsers, setNewUsers] = useState<IUser []>([]);
+  const {data: users, isLoading, error} = api.useGetUsersQuery(10);
 
-  // не понял какой именно тип ивента нужно указать
-  function scrollHandler(e: any) {
-    if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
-      setIsBottom(true);
-    }
+  function scrollHandler() {
+    // меняем местами первые две записи
+    setNewUsers((prev) => {
+      return prev.slice(2).concat(...prev.slice(0,2));
+    })
   };
 
   useEffect(() => {
-    document.addEventListener('scroll', scrollHandler);
-    return () => document.removeEventListener('scroll', scrollHandler);
-  }, [])
-
-  // если изначально нету скролла, дополняем список
-  useEffect(() => {
-    if (document.body.scrollHeight <= window.innerHeight) {
-      setLimit(prev => prev + 2);
-    }
+    users && setNewUsers(users);
   }, [users])
-
-  useEffect(() => {
-    if (isBottom) {
-      setLimit(prev => prev + 2);
-      setIsBottom(false);
-    }
-  }, [isBottom])
 
   if (error) {
     return <Box>Произошла ошибка!</Box>
@@ -56,8 +41,9 @@ function DataPanel() {
           height={200}
         /> :
         <DataTable
-          users={users || []}
+          users={newUsers || []}
           filter={filter}
+          scrollHandler={scrollHandler}
         />
       }
     </Box>
